@@ -27,4 +27,10 @@ EXPOSE 3000
 EXPOSE 11434
 
 # Start Ollama + Next.js
-CMD sh -c "ollama serve & npm run start"
+CMD sh -c "\
+ollama serve & \
+echo 'Waiting for Ollama...' && \
+until curl -s http://localhost:11434/api/tags > /dev/null; do sleep 2; done && \
+echo 'Ollama is ready' && \
+npm run start"
+
