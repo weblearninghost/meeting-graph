@@ -1,6 +1,5 @@
 FROM node:18-slim
 
-# Install system dependencies (IMPORTANT)
 RUN apt-get update && apt-get install -y \
     curl \
     zstd \
@@ -10,27 +9,21 @@ RUN apt-get update && apt-get install -y \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Set working directory
-WORKDIR /app
+ENV OLLAMA_HOST=0.0.0.0:11434
 
-# Copy project files
+WORKDIR /app
 COPY . .
 
-# Install Node dependencies
 RUN npm install
 
-# Pull the SMALLEST model (still risky but required)
-RUN ollama pull tinyllama
-
-# Expose ports
 EXPOSE 3000
 EXPOSE 11434
 
-# Start Ollama + Next.js
 CMD sh -c "\
 ollama serve & \
 echo 'Waiting for Ollama...' && \
 until curl -s http://localhost:11434/api/tags > /dev/null; do sleep 2; done && \
-echo 'Ollama is ready' && \
+echo 'Pulling model...' && \
+ollama pull tinyllama && \
+echo 'Starting Next.js' && \
 npm run start"
-
