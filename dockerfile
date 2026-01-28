@@ -1,7 +1,11 @@
 FROM node:18-slim
 
-# Install dependencies
-RUN apt-get update && apt-get install -y curl
+# Install system dependencies (IMPORTANT)
+RUN apt-get update && apt-get install -y \
+    curl \
+    zstd \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
@@ -9,13 +13,13 @@ RUN curl -fsSL https://ollama.com/install.sh | sh
 # Set working directory
 WORKDIR /app
 
-# Copy project
+# Copy project files
 COPY . .
 
 # Install Node dependencies
 RUN npm install
 
-# Pull SMALLEST possible model
+# Pull the SMALLEST model (still risky but required)
 RUN ollama pull tinyllama
 
 # Expose ports
