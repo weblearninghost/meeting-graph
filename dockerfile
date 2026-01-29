@@ -1,19 +1,29 @@
-FROM node:20-bullseye
-
-WORKDIR /app
+FROM node:20-alpine
 
 RUN apt-get update && apt-get install -y \
-  curl \
-  ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
+    curl \
+    zstd \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-COPY package*.json ./
+ENV OLLAMA_HOST=0.0.0.0:11434
+
+WORKDIR /app
+COPY . .
+
 RUN npm install
 
-COPY . .
-RUN npm run build
+EXPOSE 3000
+EXPOSE 11434
 
-CMD ["sh", "-c", "ollama serve & npm run start"]
+CMD sh -c "\
+ollama serve & \
+echo 'Waiting for Ollama...' && \
+until curl -s http://localhost:11434/api/tags > /dev/null; do sleep 2; done && \
+echo 'Pulling model...' && \
+ollama pull tinyllama && \
+echo 'Starting Next.js' && \
+npm run start"

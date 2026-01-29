@@ -7,13 +7,15 @@ export default function GraphView({ graph }: { graph: GraphData }) {
   const nodes: Node[] = graph.nodes.map((n) => ({
   id: `node-${n.id}`, 
   data: { label: `${n.label} (${n.type})` },
-  position: { x: 0, y: 0 }, // temporary
+  position: { x: 0, y: 0 },
   style: {
     border: "1px solid #333",
     padding: 10,
     borderRadius: 8,
     background: n.type === "person" ? "#E3F2FD" : "#E8F5E9",
   },
+ 
+  
 }));
 
 
@@ -24,7 +26,7 @@ export default function GraphView({ graph }: { graph: GraphData }) {
   label: e.relation,
   animated: true,
 }));
-
+   console.log({nodes});
 
   return (
     <div style={{ height: 500, border: "1px solid #ddd", marginTop: 20 }}>

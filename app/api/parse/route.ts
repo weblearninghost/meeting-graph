@@ -34,11 +34,11 @@ ${transcript}
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'tinyllama',
+      model: 'phi3',
       prompt,
       stream: false,
       options: {
-      temperature: 0,   // 👈 MOST IMPORTANT
+      temperature: 0,  
       top_p: 1,
       top_k: 1,
     },
@@ -46,7 +46,7 @@ ${transcript}
   });
 
   const data = await res.json();
- 
+  
 
   let graph;
   try {
@@ -54,7 +54,5 @@ ${transcript}
   } catch {
     graph = { nodes: [], edges: [] };
   }
-  console.log(graph);
-  console.log("------------Next start on port:",process.env.PORT);
   return NextResponse.json(graph);
 }
