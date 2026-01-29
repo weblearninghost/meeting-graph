@@ -1,10 +1,10 @@
 FROM node:20-alpine
 
-RUN apt-get update && apt-get install -y \
-    curl \
-    zstd \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+  curl \
+  zstd \
+  ca-certificates
+
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
