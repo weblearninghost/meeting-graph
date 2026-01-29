@@ -55,5 +55,6 @@ ${transcript}
     graph = { nodes: [], edges: [] };
   }
   console.log(graph);
+  console.log("------------Next start on port:",process.env.PORT);
   return NextResponse.json(graph);
 }
