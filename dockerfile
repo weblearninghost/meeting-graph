@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
 ENV OLLAMA_HOST=0.0.0.0:11434
+ENV PORT=3000
 
 WORKDIR /app
 COPY . .
