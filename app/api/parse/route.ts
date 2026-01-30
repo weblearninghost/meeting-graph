@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 const  OLLAMA_URL = "http://127.0.0.1:11434";
+import { logger } from '@/app/lib/logger';
+
+
 export async function POST(req: Request) {
   const { transcript } = await req.json();
 
@@ -28,8 +31,7 @@ Rules:
 Transcript:
 ${transcript}
 `;
-
-
+try {
   const res = await fetch(`${OLLAMA_URL}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -46,7 +48,7 @@ ${transcript}
   });
 
   const data = await res.json();
-  
+  logger.info("Data recieved from Ollama server. ")
 
   let graph;
   try {
@@ -55,4 +57,9 @@ ${transcript}
     graph = { nodes: [], edges: [] };
   }
   return NextResponse.json(graph);
+} catch (error) {
+  logger.error({error},"Failed to fetch data from Ollama server.");
+}
+
+  
 }
