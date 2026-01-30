@@ -16,11 +16,13 @@ export default function Home() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transcript: text }),
     });
-
-    const data = await res.json();
+    if(res){
+      logger.info({res},'Got Response');
+       const data = await res.json();
     logger.info({data},'Data successfully fetched.');
+    }
+   
     
-    setGraph(data);
     } catch (error) {
       logger.error({error},'Failed to fetch data from api/parse rote');
     }
