@@ -2,21 +2,29 @@
 import { useState } from "react";
 import GraphView from "./components/GraphView";
 import { GraphData } from "./types/graph";
+import { logger } from './lib/logger';
 
 export default function Home() {
   const [text, setText] = useState("");
   const [graph, setGraph] = useState<GraphData | null>(null);
 
   async function handleClick() {
-    const res = await fetch("/api/parse", {
+    logger.info('Generate Graph button clicked.');
+    try {
+        const res = await fetch("/api/parse", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transcript: text }),
     });
 
     const data = await res.json();
-    console.log({data});
+    logger.info({data},'Data successfully fetched.');
+    
     setGraph(data);
+    } catch (error) {
+      logger.error({error},'Failed to fetch data from api/parse rote');
+    }
+  
   }
 
   return (

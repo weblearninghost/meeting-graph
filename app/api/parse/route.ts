@@ -48,7 +48,7 @@ try {
   });
 
   const data = await res.json();
-  logger.info("Data recieved from Ollama server. ")
+  logger.info({data},"Data recieved from Ollama server. ")
 
   let graph;
   try {
